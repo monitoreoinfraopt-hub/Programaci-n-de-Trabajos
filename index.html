@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Programación de Trabajos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --card-bg: #ffffff;
+      --primary: #005fb8;
+      --primary-soft: rgba(0, 95, 184, 0.08);
+      --danger: #d93636;
+      --border: #dde1e7;
+      --text-main: #1f2933;
+      --text-muted: #6b7280;
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 1.5rem;
+      background: var(--bg);
+      color: var(--text-main);
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    header p {
+      margin: 0.5rem 0 0;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .form-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: 0 12px 25px rgba(15, 23, 42, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem 1.25rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem 1.25rem;
+    }
+
+    @media (max-width: 900px) {
+      .grid,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    fieldset {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem 1.25rem;
+      margin: 0 0 1rem;
+      background: #ffffff;
+    }
+
+    legend {
+      padding: 0 0.5rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .required::after {
+      content: " *";
+      color: var(--danger);
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.55rem 0.65rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.9rem;
+      transition: border 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+      background-color: #f9fafb;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      font-size: 0.85rem;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary-soft);
+      background-color: #ffffff;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    .help {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .error-message {
+      margin-top: 0.3rem;
+      font-size: 0.78rem;
+      color: var(--danger);
+      display: none;
+    }
+
+    .has-error input,
+    .has-error select,
+    .has-error textarea {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 1px rgba(217, 54, 54, 0.08);
+    }
+
+    .tagline {
+      background: var(--primary-soft);
+      border-radius: 999px;
+      padding: 0.35rem 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .actions {
+      margin-top: 1.2rem;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border-radius: 999px;
+      border: none;
+      padding: 0.55rem 1.4rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 8px 18px rgba(0, 95, 184, 0.35);
+    }
+
+    .btn-primary:hover {
+      background: #00448a;
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .btn-secondary:hover {
+      background: #d1d5db;
+    }
+
+    button:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    .alert {
+      margin-top: 0.8rem;
+      padding: 0.7rem 0.9rem;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      display: none;
+    }
+
+    .alert-success {
+      background: #ecfdf3;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+    }
+
+    .alert-error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+    }
+
+    .multiselect-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      background: #f3f4f6;
+      color: #4b5563;
+      margin-left: 0.25rem;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="tagline">Formulario NOC/WINET</div>
+      <h1>Programación de Trabajos</h1>
+      <p>
+        Formulario para notificar los trabajos programados por las áreas del NOC, Ingeniería, O&amp;M, Infraestructura,
+        Ciberseguridad, SVA (WINTV-Telefonía) y Planta Externa.
+      </p>
+    </header>
+
+    <section class="form-card">
+      <form id="jobForm" novalidate>
+        <!-- INFORMACIÓN GENERAL -->
+        <fieldset>
+          <legend>Información del trabajo</legend>
+          <div class="grid">
+            <div class="form-group">
+              <label for="tituloTrabajo" class="required">Título de trabajo</label>
+              <input
+                type="text"
+                id="tituloTrabajo"
+                name="tituloTrabajo"
+                maxlength="150"
+                required
+              />
+              <!--<div class="help">Se convertirá automáticamente a MAYÚSCULAS.</div>-->
+              <div class="error-message">Ingrese el título del trabajo.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="nodo" class="required">Nodo</label>
+              <select id="nodo" name="nodo" required>
+                <option value="">— Seleccionar —</option>
+                <option value="LA MOLINA">LA MOLINA</option>
+                <option value="VITARTE">VITARTE</option>
+                <option value="ZARATE">ZÁRATE</option>
+                <!-- Agrega aquí los demás nodos -->
+              </select>
+              <div class="error-message">Seleccione un nodo.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="tipoCambio" class="required">Tipo de cambio</label>
+              <select id="tipoCambio" name="tipoCambio" required>
+                <option value="">— Seleccionar —</option>
+                <option value="CAMBIO ESTANDAR ( TRABAJO PROGRAMADO )">CAMBIO ESTÁNDAR ( TRABAJO PROGRAMADO )</option>
+                <option value="CAMBIO DE EMERGENCIA ( TRABAJO DE EMERGENCIA )">
+                  CAMBIO DE EMERGENCIA ( TRABAJO DE EMERGENCIA )
+                </option>
+              </select>
+              <div class="error-message">Seleccione el tipo de cambio.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="riesgoImpacto" class="required">Riesgo o impacto</label>
+              <select id="riesgoImpacto" name="riesgoImpacto" required>
+                <option value="">— Seleccionar —</option>
+                <option value="BAJO ( SIN AFECTACION )">BAJO ( SIN AFECTACIÓN )</option>
+                <option value="MEDIO ( POSIBLE AFECTACION )">MEDIO ( POSIBLE AFECTACIÓN )</option>
+                <option value="ALTO ( CON AFECTACION )">ALTO ( CON AFECTACIÓN )</option>
+              </select>
+              <div class="error-message">Seleccione el nivel de riesgo o impacto.</div>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- VENTANA DE EJECUCIÓN -->
+        <fieldset>
+          <legend>Ventana de ejecución</legend>
+          <div class="grid">
+            <div class="form-group">
+              <label for="fechaInicio" class="required">Fecha de inicio</label>
+              <input type="date" id="fechaInicio" name="fechaInicio" required />
+              <!--<div class="help">No se permiten fechas anteriores a hoy.</div>-->
+              <div class="error-message">Seleccione una fecha de inicio válida.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="fechaFin" class="required">Fecha de fin</label>
+              <input type="date" id="fechaFin" name="fechaFin" required />
+              <div class="help">Debe ser igual o posterior a la fecha de inicio.</div>
+              <div class="error-message">Seleccione una fecha de fin válida.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="horaInicio" class="required">Hora de inicio</label>
+              <input type="time" id="horaInicio" name="horaInicio" required />
+              <div class="error-message">Seleccione la hora de inicio.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="horaFin" class="required">Hora de fin</label>
+              <input type="time" id="horaFin" name="horaFin" required />
+              <!--<div class="help">
+                Para la misma fecha, la hora fin debe ser mayor a la hora inicio.
+              </div>-->
+              <div class="error-message">
+                Revise la hora de fin. Para la misma fecha debe ser posterior a la hora de inicio.
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="corteEfectivo" class="required">Corte efectivo (minutos)</label>
+              <select id="corteEfectivo" name="corteEfectivo" required>
+                <option value="">— Seleccionar —</option>
+                <option>5</option><option>10</option><option>15</option><option>20</option><option>30</option>
+                <option>60</option><option>90</option><option>120</option><option>180</option><option>240</option>
+                <option>300</option><option>360</option><option>420</option><option>480</option>
+              </select>
+              <div class="error-message">Seleccione el corte efectivo en minutos.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="ventanaHoras" class="required">Ventana de trabajo (horas)</label>
+              <select id="ventanaHoras" name="ventanaHoras" required>
+                <option value="">— Seleccionar —</option>
+                <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
+                <option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option>
+              </select>
+              <div class="error-message">Seleccione la ventana de trabajo en horas.</div>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- DETALLE DEL TRABAJO -->
+        <fieldset>
+          <legend>Detalle del trabajo</legend>
+          <div class="form-group">
+            <label for="detalleTrabajo" class="required">Detalle del trabajo</label>
+            <textarea
+              id="detalleTrabajo"
+              name="detalleTrabajo"
+              maxlength="200"
+              required
+            ></textarea>
+            <div class="help">Máx. 200 caracteres.</div>
+            <div class="error-message">Describa brevemente el trabajo.</div>
+          </div>
+        </fieldset>
+
+        <!-- RESPONSABLE -->
+        <fieldset>
+          <legend>Área responsable y contacto</legend>
+
+          <div class="grid">
+            <div class="form-group">
+              <label for="areaResponsable" class="required">Área responsable</label>
+              <select id="areaResponsable" name="areaResponsable" required>
+                <option value="">— Seleccionar —</option>
+                <option>INGENIERIA</option>
+                <option>O&amp;M</option>
+                <option>INFRAESTRUCTURA</option>
+                <option>PLANTA EXTERNA</option>
+                <option>CIBERSEGURIDAD</option>
+                <option>PROYECTOS ESPECIALES</option>
+              </select>
+              <div class="error-message">Seleccione el área responsable.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="nombreResponsable" class="required">Nombre del responsable</label>
+              <input
+                type="text"
+                id="nombreResponsable"
+                name="nombreResponsable"
+                required
+                pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+"
+              />
+             <!-- <div class="help">Solo letras. Se convertirá a MAYÚSCULAS.</div>-->
+              <div class="error-message">Este campo solo permite texto (sin números ni signos).</div>
+            </div>
+
+            <div class="form-group">
+              <label for="apellidoPaterno" class="required">Apellido paterno</label>
+              <input
+                type="text"
+                id="apellidoPaterno"
+                name="apellidoPaterno"
+                required
+                pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+"
+              />
+             <!-- <div class="help">Solo letras. Se convertirá a MAYÚSCULAS.</div>-->
+              <div class="error-message">Este campo solo permite texto (sin números ni signos).</div>
+            </div>
+
+            <div class="form-group">
+              <label for="apellidoMaterno" class="required">Apellido materno</label>
+              <input
+                type="text"
+                id="apellidoMaterno"
+                name="apellidoMaterno"
+                required
+                pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+"
+              />
+              <!--<div class="help">Solo letras. Se convertirá a MAYÚSCULAS.</div>-->
+              <div class="error-message">Este campo solo permite texto (sin números ni signos).</div>
+            </div>
+
+            <div class="form-group">
+              <label for="telefonoResponsable" class="required">Número de contacto</label>
+              <input
+                type="tel"
+                id="telefonoResponsable"
+                name="telefonoResponsable"
+                maxlength="9"
+                pattern="\d{9}"
+                inputmode="numeric"
+                required
+              />
+              <div class="help">Debe tener 9 dígitos</div>
+              <div class="error-message">Ingrese un número de contacto válido (9 dígitos).</div>
+            </div>
+
+            <div class="form-group">
+              <label for="correoResponsable" class="required">Correo del responsable</label>
+              <input
+                type="email"
+                id="correoResponsable"
+                name="correoResponsable"
+                required
+              />
+              <!--<div class="help">Puede contener letras, números y signos.</div>-->
+              <div class="error-message">Ingrese un correo electrónico válido.</div>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- APOYO E IMPACTO -->
+        <fieldset>
+          <legend>Área de apoyo e impacto</legend>
+
+          <div class="grid">
+            <div class="form-group">
+              <label for="areaApoyo" class="required">
+                Área de apoyo
+                <span class="pill">se permiten múltiples opciones</span>
+              </label>
+              <div id="areaApoyoCheckboxes" style="padding:10px;border:1px solid #dde1e7;border-radius:8px;background:#f9fafb;">
+<label><input type="checkbox" name="areaApoyo" value="SVA ( TELEFONIA - WINTV )"> SVA ( Telefonía - WINTV )</label><br>
+<label><input type="checkbox" name="areaApoyo" value="CIBERSEGURIDAD"> Ciberseguridad</label><br>
+<label><input type="checkbox" name="areaApoyo" value="INFRAESTRUCTURA Y MANTENIMIENTO"> Infraestructura y Mantenimiento</label><br>
+<label><input type="checkbox" name="areaApoyo" value="INGENIERIA"> Ingeniería</label><br>
+<label><input type="checkbox" name="areaApoyo" value="INSTALACIONES"> Instalaciones</label><br>
+<label><input type="checkbox" name="areaApoyo" value="NOC"> NOC</label><br>
+<label><input type="checkbox" name="areaApoyo" value="PLANTA EXTERNA"> Planta Externa</label><br>
+<label><input type="checkbox" name="areaApoyo" value="O&M"> O&M</label><br>
+<label><input type="checkbox" name="areaApoyo" value="MONITOREO INFRAESTRUCTURA"> Monitoreo Infraestructura</label>
+</div>
+             <!-- <div class="multiselect-note">
+                Mantenga presionada la tecla <strong>Ctrl</strong> (o <strong>Cmd</strong> en Mac) para seleccionar varias opciones.
+              </div>-->
+              <div class="error-message">Seleccione al menos un área de apoyo.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="clientesAfectados" class="required">Clientes y/o enlaces afectados</label>
+              <select id="clientesAfectados" name="clientesAfectados" required>
+                <option value="">— Seleccionar —</option>
+                <option value="SI">SI</option>
+                <option value="NO">NO</option>
+              </select>
+              <div class="error-message">Indique si hay clientes y/o enlaces afectados.</div>
+            </div>
+          </div>
+
+          <!-- Campos mostrados solo cuando clientesAfectados = SI -->
+          <div id="afectadosExtra" style="margin-top: 1rem; display: none;">
+            <div class="grid">
+              <div class="form-group">
+                <label for="cantidadClientes" class="required">Cantidad de clientes afectados</label>
+                <input
+                  type="number"
+                  id="cantidadClientes"
+                  name="cantidadClientes"
+                  min="1"
+                />
+                <div class="error-message">Ingrese la cantidad de clientes afectados.</div>
+              </div>
+
+              <div class="form-group">
+                <label for="archivoAfectados" class="required">Subir archivo Excel de los afectados</label>
+                <input
+                  type="file"
+                  id="archivoAfectados"
+                  name="archivoAfectados"
+                  accept=".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                />
+                <div class="help">Formato Excel (.xls, .xlsx). Máx. 5 MB.</div>
+                <div class="error-message">
+                  Adjunte el archivo Excel de los afectados (máx. 5 MB, solo Excel).
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Archivo plan trabajo (siempre visible) -->
+          <div style="margin-top: 1rem;">
+            <div class="form-group">
+              <label for="archivoPlan" class="required">Subir archivo Excel del plan de trabajo</label>
+              <input
+                type="file"
+                id="archivoPlan"
+                name="archivoPlan"
+                required
+                accept=".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              />
+              <div class="help">Formato Excel (.xls, .xlsx). Máx. 5 MB.</div>
+              <div class="error-message">
+                Adjunte el plan de trabajo en Excel (máx. 5 MB, solo Excel).
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="actions">
+          <button type="reset" class="btn-secondary">Limpiar</button>
+          <button type="submit" class="btn-primary">Enviar programación</button>
+        </div>
+
+        <div id="alertSuccess" class="alert alert-success">
+          Formulario enviado correctamente.
+        </div>
+        <div id="alertError" class="alert alert-error">
+          No se pudo enviar el formulario. Verifique los campos y/o la conexión.
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <script>
+    // 1) Configuración: reemplace esta constante por la URL de su flujo de Power Automate (HTTP Request trigger).
+    const FLOW_URL = "https://TU_URL_DE_POWER_AUTOMATE_AQUI";
+
+    const form = document.getElementById("jobForm");
+    const alertSuccess = document.getElementById("alertSuccess");
+    const alertError = document.getElementById("alertError");
+    const afectadosExtra = document.getElementById("afectadosExtra");
+    const clientesAfectadosSelect = document.getElementById("clientesAfectados");
+    const cantidadClientesInput = document.getElementById("cantidadClientes");
+    const archivoAfectadosInput = document.getElementById("archivoAfectados");
+    const archivoPlanInput = document.getElementById("archivoPlan");
+
+    // Campos con mayúsculas forzadas mientras se escribe
+    const uppercaseFields = [
+      "tituloTrabajo",
+      "detalleTrabajo",
+      "nombreResponsable",
+      "apellidoPaterno",
+      "apellidoMaterno"
+    ];
+
+    uppercaseFields.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener("input", () => {
+        const pos = el.selectionStart;
+        el.value = el.value.toUpperCase();
+        el.setSelectionRange(pos, pos);
+      });
+    });
+
+    // Validación: solo texto (sin números ni signos) en nombre y apellidos
+    const soloTextoCampos = [
+      "nombreResponsable",
+      "apellidoPaterno",
+      "apellidoMaterno"
+    ];
+
+    function mostrarErrorTexto(input) {
+      const contenedor = input.closest(".form-group");
+      if (!contenedor) return;
+      const error = contenedor.querySelector(".error-message");
+      if (!error) return;
+      contenedor.classList.add("has-error");
+      error.textContent = "Este campo solo permite texto (sin números ni signos).";
+      error.style.display = "block";
+    }
+
+    soloTextoCampos.forEach(id => {
+      const input = document.getElementById(id);
+      if (!input) return;
+      input.addEventListener("input", function () {
+        const original = this.value;
+        const limpio = original.replace(/[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]/g, "");
+        if (original !== limpio) {
+          this.value = limpio;
+          mostrarErrorTexto(this);
+        }
+      });
+    });
+
+    // Solo números para teléfono y 9 dígitos
+    const telefonoResponsable = document.getElementById("telefonoResponsable");
+    telefonoResponsable.addEventListener("input", () => {
+      telefonoResponsable.value = telefonoResponsable.value.replace(/\D/g, "").slice(0, 9);
+    });
+
+    // No permitir fechas anteriores a hoy
+    function todayISO() {
+      const d = new Date();
+      d.setHours(0, 0, 0, 0);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    const fechaInicio = document.getElementById("fechaInicio");
+    const fechaFin = document.getElementById("fechaFin");
+
+    const minDate = todayISO();
+    fechaInicio.min = minDate;
+    fechaFin.min = minDate;
+
+    fechaInicio.addEventListener("change", () => {
+      if (fechaInicio.value) {
+        fechaFin.min = fechaInicio.value < minDate ? minDate : fechaInicio.value;
+        if (fechaFin.value && fechaFin.value < fechaFin.min) {
+          fechaFin.value = fechaFin.min;
+        }
+      } else {
+        fechaFin.min = minDate;
+      }
+      validateDatesAndTimes();
+    });
+
+    fechaFin.addEventListener("change", validateDatesAndTimes);
+
+    const horaInicio = document.getElementById("horaInicio");
+    const horaFin = document.getElementById("horaFin");
+
+    horaInicio.addEventListener("change", validateDatesAndTimes);
+    horaFin.addEventListener("change", validateDatesAndTimes);
+
+    function getDateTime(dateInput, timeInput) {
+      if (!dateInput.value || !timeInput.value) return null;
+      return new Date(`${dateInput.value}T${timeInput.value}:00`);
+    }
+
+    function validateDatesAndTimes() {
+      let isValid = true;
+
+      // reset custom validity
+      fechaInicio.setCustomValidity("");
+      fechaFin.setCustomValidity("");
+      horaInicio.setCustomValidity("");
+      horaFin.setCustomValidity("");
+
+      const min = new Date(minDate + "T00:00:00");
+
+      const startDate = fechaInicio.value ? new Date(fechaInicio.value + "T00:00:00") : null;
+      const endDate = fechaFin.value ? new Date(fechaFin.value + "T00:00:00") : null;
+
+      if (startDate && startDate < min) {
+        fechaInicio.setCustomValidity("La fecha de inicio no puede ser anterior a hoy.");
+        isValid = false;
+      }
+
+      if (startDate && endDate && endDate < startDate) {
+        fechaFin.setCustomValidity("La fecha de fin debe ser igual o posterior a la fecha de inicio.");
+        isValid = false;
+      }
+
+      if (fechaInicio.value && fechaFin.value && horaInicio.value && horaFin.value) {
+        const dtStart = getDateTime(fechaInicio, horaInicio);
+        const dtEnd = getDateTime(fechaFin, horaFin);
+        const sameDate = fechaInicio.value === fechaFin.value;
+
+        const horaFinContainer = horaFin.closest(".form-group");
+        const horaFinError = horaFinContainer ? horaFinContainer.querySelector(".error-message") : null;
+
+        let msg = "";
+
+        if (sameDate) {
+          // misma hora
+          if (horaFin.value === horaInicio.value) {
+            msg = "La hora de salida debe ser posterior a la hora de ingreso.";
+          }
+          // hora fin menor que hora inicio
+          else if (dtEnd < dtStart) {
+            msg = "La hora de salida pertenece al día siguiente. Cambia la fecha de salida.";
+          }
+        } else {
+          // fechas distintas pero hora fin no posterior
+          if (dtEnd <= dtStart) {
+            msg = "La hora de fin debe ser posterior a la hora de inicio.";
+          }
+        }
+
+        if (msg) {
+          horaFin.setCustomValidity(msg);
+          if (horaFinError) {
+            horaFinError.textContent = msg;
+            horaFinContainer.classList.add("has-error");
+            horaFinError.style.display = "block";
+          }
+          horaFin.reportValidity();
+          isValid = false;
+        } else if (horaFinError) {
+          horaFin.setCustomValidity("");
+          horaFinContainer.classList.remove("has-error");
+          horaFinError.style.display = "none";
+          horaFinError.textContent = "Revise la hora de fin. Para la misma fecha debe ser posterior a la hora de inicio.";
+        }
+      }
+
+      return isValid;
+    }
+
+    // Mostrar/ocultar campos extra cuando hay clientes afectados
+    clientesAfectadosSelect.addEventListener("change", () => {
+      const value = clientesAfectadosSelect.value;
+      if (value === "SI") {
+        afectadosExtra.style.display = "block";
+        cantidadClientesInput.setAttribute("required", "required");
+        archivoAfectadosInput.setAttribute("required", "required");
+      } else {
+        afectadosExtra.style.display = "none";
+        cantidadClientesInput.removeAttribute("required");
+        archivoAfectadosInput.removeAttribute("required");
+        cantidadClientesInput.value = "";
+        archivoAfectadosInput.value = "";
+        cantidadClientesInput.setCustomValidity("");
+        archivoAfectadosInput.setCustomValidity("");
+      }
+    });
+
+    // Validación de archivos (tipo y tamaño)
+    function validateFileInput(fileInput, required) {
+      const container = fileInput.closest(".form-group");
+      const errorEl = container.querySelector(".error-message");
+      const file = fileInput.files[0];
+
+      container.classList.remove("has-error");
+      errorEl.style.display = "none";
+      fileInput.setCustomValidity("");
+
+      if (!file && required) {
+        fileInput.setCustomValidity("Campo obligatorio.");
+        container.classList.add("has-error");
+        errorEl.style.display = "block";
+        return false;
+      }
+
+      if (!file) return true; // no requerido y vacío
+
+      const maxSize = 5 * 1024 * 1024; // 5 MB
+      const allowedTypes = [
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      ];
+      const extensionOk = /\.xlsx?$/.test(file.name.toLowerCase());
+      const typeOk = allowedTypes.includes(file.type) || extensionOk;
+
+      if (!typeOk || file.size > maxSize) {
+        fileInput.setCustomValidity("Archivo inválido.");
+        container.classList.add("has-error");
+        errorEl.style.display = "block";
+        return false;
+      }
+
+      return true;
+    }
+
+    archivoPlanInput.addEventListener("change", () => {
+      validateFileInput(archivoPlanInput, true);
+    });
+    archivoAfectadosInput.addEventListener("change", () => {
+      const required = clientesAfectadosSelect.value === "SI";
+      validateFileInput(archivoAfectadosInput, required);
+    });
+
+    // Mostrar errores de campos requeridos
+    function showFieldErrors() {
+      const fields = form.querySelectorAll("input, select, textarea");
+      fields.forEach(field => {
+        const container = field.closest(".form-group");
+        if (!container) return;
+        const errorEl = container.querySelector(".error-message");
+        if (!errorEl) return;
+
+        if (!field.checkValidity()) {
+          container.classList.add("has-error");
+          errorEl.style.display = "block";
+        } else {
+          container.classList.remove("has-error");
+          errorEl.style.display = "none";
+        }
+      });
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      alertSuccess.style.display = "none";
+      alertError.style.display = "none";
+
+      const datesValid = validateDatesAndTimes();
+      const planValid = validateFileInput(archivoPlanInput, true);
+      const afectadosValid = validateFileInput(
+        archivoAfectadosInput,
+        clientesAfectadosSelect.value === "SI"
+      );
+
+      if (!form.checkValidity() || !datesValid || !planValid || !afectadosValid) {
+        showFieldErrors();
+        alertError.style.display = "block";
+        alertError.textContent = "Revise los campos marcados en rojo.";
+        return;
+      }
+
+      showFieldErrors();
+
+      try {
+        // Convertir select múltiple en arreglo de strings
+        const areaApoyoOptions = Array.from(document.querySelectorAll('input[name="areaApoyo"]:checked')).map(cb => cb.value);
+
+        // Convierte archivos a base64 para enviarlos dentro del JSON
+        async function fileToBase64Info(fileInput) {
+          const file = fileInput.files[0];
+          if (!file) return null;
+
+          const base64 = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+              const result = reader.result.split(",")[1]; // quitar encabezado data:
+              resolve(result);
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          });
+
+          return {
+            fileName: file.name,
+            contentType: file.type || "application/octet-stream",
+            contentBase64: base64
+          };
+        }
+
+        const archivoPlanInfo = await fileToBase64Info(archivoPlanInput);
+        const archivoAfectadosInfo = await fileToBase64Info(archivoAfectadosInput);
+
+        const payload = {
+          tituloTrabajo: document.getElementById("tituloTrabajo").value.trim().toUpperCase(),
+          nodo: document.getElementById("nodo").value,
+          tipoCambio: document.getElementById("tipoCambio").value,
+          riesgoImpacto: document.getElementById("riesgoImpacto").value,
+          fechaInicio: fechaInicio.value,
+          fechaFin: fechaFin.value,
+          horaInicio: horaInicio.value,
+          horaFin: horaFin.value,
+          corteEfectivoMinutos: document.getElementById("corteEfectivo").value,
+          ventanaTrabajoHoras: document.getElementById("ventanaHoras").value,
+          detalleTrabajo: document.getElementById("detalleTrabajo").value.trim().toUpperCase(),
+          areaResponsable: document.getElementById("areaResponsable").value,
+          nombreResponsable: document.getElementById("nombreResponsable").value.trim().toUpperCase(),
+          apellidoPaterno: document.getElementById("apellidoPaterno").value.trim().toUpperCase(),
+          apellidoMaterno: document.getElementById("apellidoMaterno").value.trim().toUpperCase(),
+          telefonoResponsable: telefonoResponsable.value,
+          correoResponsable: document.getElementById("correoResponsable").value.trim(),
+          areaApoyo: areaApoyoOptions,
+          clientesAfectados: clientesAfectadosSelect.value,
+          cantidadClientesAfectados:
+            clientesAfectadosSelect.value === "SI" ? (cantidadClientesInput.value || null) : null,
+          archivoAfectados: clientesAfectadosSelect.value === "SI" ? archivoAfectadosInfo : null,
+          archivoPlanTrabajo: archivoPlanInfo
+        };
+
+        // Envío al flujo de Power Automate
+        const res = await fetch(FLOW_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          throw new Error("Error HTTP " + res.status);
+        }
+
+        alertSuccess.style.display = "block";
+        alertSuccess.textContent = "Formulario enviado correctamente.";
+        form.reset();
+        afectadosExtra.style.display = "none";
+        fechaInicio.min = minDate;
+        fechaFin.min = minDate;
+      } catch (err) {
+        console.error(err);
+        alertError.style.display = "block";
+        alertError.textContent =
+          "Ocurrió un error al enviar la información. Verifique la configuración del flujo de Power Automate.";
+      }
+    });
+
+    // Quitar estado de error al modificar un campo
+    form.addEventListener("input", (e) => {
+      const field = e.target;
+      const container = field.closest(".form-group");
+      if (!container) return;
+      const errorEl = container.querySelector(".error-message");
+      if (!errorEl) return;
+      if (field.checkValidity()) {
+        container.classList.remove("has-error");
+        errorEl.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
