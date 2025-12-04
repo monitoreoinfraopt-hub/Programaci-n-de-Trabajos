@@ -289,7 +289,6 @@
                 maxlength="150"
                 required
               />
-              <!--<div class="help">Se convertirá automáticamente a MAYÚSCULAS.</div>-->
               <div class="error-message">Ingrese el título del trabajo.</div>
             </div>
 
@@ -337,7 +336,6 @@
             <div class="form-group">
               <label for="fechaInicio" class="required">Fecha de inicio</label>
               <input type="date" id="fechaInicio" name="fechaInicio" required />
-              <!--<div class="help">No se permiten fechas anteriores a hoy.</div>-->
               <div class="error-message">Seleccione una fecha de inicio válida.</div>
             </div>
 
@@ -357,9 +355,6 @@
             <div class="form-group">
               <label for="horaFin" class="required">Hora de fin</label>
               <input type="time" id="horaFin" name="horaFin" required />
-              <!--<div class="help">
-                Para la misma fecha, la hora fin debe ser mayor a la hora inicio.
-              </div>-->
               <div class="error-message">
                 Revise la hora de fin. Para la misma fecha debe ser posterior a la hora de inicio.
               </div>
@@ -408,6 +403,7 @@
         <fieldset>
           <legend>Área responsable y contacto</legend>
 
+          <!-- Responsable principal -->
           <div class="grid">
             <div class="form-group">
               <label for="areaResponsable" class="required">Área responsable</label>
@@ -432,12 +428,11 @@
                 required
                 pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+"
               />
-             <!-- <div class="help">Solo letras. Se convertirá a MAYÚSCULAS.</div>-->
               <div class="error-message">Este campo solo permite texto (sin números ni signos).</div>
             </div>
 
             <div class="form-group">
-              <label for="apellidoPaterno" class="required">Apellido paterno</label>
+              <label for="apellidoPaterno" class="required">Apellido paterno del responsable</label>
               <input
                 type="text"
                 id="apellidoPaterno"
@@ -445,12 +440,11 @@
                 required
                 pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+"
               />
-             <!-- <div class="help">Solo letras. Se convertirá a MAYÚSCULAS.</div>-->
               <div class="error-message">Este campo solo permite texto (sin números ni signos).</div>
             </div>
 
             <div class="form-group">
-              <label for="apellidoMaterno" class="required">Apellido materno</label>
+              <label for="apellidoMaterno" class="required">Apellido materno del responsable</label>
               <input
                 type="text"
                 id="apellidoMaterno"
@@ -458,12 +452,11 @@
                 required
                 pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+"
               />
-              <!--<div class="help">Solo letras. Se convertirá a MAYÚSCULAS.</div>-->
               <div class="error-message">Este campo solo permite texto (sin números ni signos).</div>
             </div>
 
             <div class="form-group">
-              <label for="telefonoResponsable" class="required">Número de contacto</label>
+              <label for="telefonoResponsable" class="required">Telf. responsable</label>
               <input
                 type="tel"
                 id="telefonoResponsable"
@@ -485,7 +478,71 @@
                 name="correoResponsable"
                 required
               />
-              <!--<div class="help">Puede contener letras, números y signos.</div>-->
+              <div class="error-message">Ingrese un correo electrónico válido.</div>
+            </div>
+          </div>
+
+          <!-- Apoyo -->
+          <div class="grid" style="margin-top:1rem;">
+            <div class="form-group">
+              <label for="nombreApoyo" class="required">Nombre apoyo</label>
+              <input
+                type="text"
+                id="nombreApoyo"
+                name="nombreApoyo"
+                required
+                pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+"
+              />
+              <div class="error-message">Este campo solo permite texto (sin números ni signos).</div>
+            </div>
+
+            <div class="form-group">
+              <label for="apellidoPaternoApoyo" class="required">Ap. Paterno apoyo</label>
+              <input
+                type="text"
+                id="apellidoPaternoApoyo"
+                name="apellidoPaternoApoyo"
+                required
+                pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+"
+              />
+              <div class="error-message">Este campo solo permite texto (sin números ni signos).</div>
+            </div>
+
+            <div class="form-group">
+              <label for="apellidoMaternoApoyo" class="required">Ap. Materno apoyo</label>
+              <input
+                type="text"
+                id="apellidoMaternoApoyo"
+                name="apellidoMaternoApoyo"
+                required
+                pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+"
+              />
+              <div class="error-message">Este campo solo permite texto (sin números ni signos).</div>
+            </div>
+
+            <div class="form-group">
+              <label for="telefonoApoyo" class="required">Telf. apoyo</label>
+              <input
+                type="tel"
+                id="telefonoApoyo"
+                name="telefonoApoyo"
+                maxlength="9"
+                pattern="\d{9}"
+                inputmode="numeric"
+                required
+              />
+              <div class="help">Debe tener 9 dígitos</div>
+              <div class="error-message">Ingrese un número de contacto válido (9 dígitos).</div>
+            </div>
+
+            <div class="form-group">
+              <label for="correoApoyo" class="required">Correo apoyo</label>
+              <input
+                type="email"
+                id="correoApoyo"
+                name="correoApoyo"
+                required
+              />
               <div class="error-message">Ingrese un correo electrónico válido.</div>
             </div>
           </div>
@@ -502,19 +559,16 @@
                 <span class="pill">se permiten múltiples opciones</span>
               </label>
               <div id="areaApoyoCheckboxes" style="padding:10px;border:1px solid #dde1e7;border-radius:8px;background:#f9fafb;">
-<label><input type="checkbox" name="areaApoyo" value="SVA ( TELEFONIA - WINTV )"> SVA ( Telefonía - WINTV )</label><br>
-<label><input type="checkbox" name="areaApoyo" value="CIBERSEGURIDAD"> Ciberseguridad</label><br>
-<label><input type="checkbox" name="areaApoyo" value="INFRAESTRUCTURA Y MANTENIMIENTO"> Infraestructura y Mantenimiento</label><br>
-<label><input type="checkbox" name="areaApoyo" value="INGENIERIA"> Ingeniería</label><br>
-<label><input type="checkbox" name="areaApoyo" value="INSTALACIONES"> Instalaciones</label><br>
-<label><input type="checkbox" name="areaApoyo" value="NOC"> NOC</label><br>
-<label><input type="checkbox" name="areaApoyo" value="PLANTA EXTERNA"> Planta Externa</label><br>
-<label><input type="checkbox" name="areaApoyo" value="O&M"> O&M</label><br>
-<label><input type="checkbox" name="areaApoyo" value="MONITOREO INFRAESTRUCTURA"> Monitoreo Infraestructura</label>
-</div>
-             <!-- <div class="multiselect-note">
-                Mantenga presionada la tecla <strong>Ctrl</strong> (o <strong>Cmd</strong> en Mac) para seleccionar varias opciones.
-              </div>-->
+                <label><input type="checkbox" name="areaApoyo" value="SVA ( TELEFONIA - WINTV )"> SVA ( Telefonía - WINTV )</label><br>
+                <label><input type="checkbox" name="areaApoyo" value="CIBERSEGURIDAD"> Ciberseguridad</label><br>
+                <label><input type="checkbox" name="areaApoyo" value="INFRAESTRUCTURA Y MANTENIMIENTO"> Infraestructura y Mantenimiento</label><br>
+                <label><input type="checkbox" name="areaApoyo" value="INGENIERIA"> Ingeniería</label><br>
+                <label><input type="checkbox" name="areaApoyo" value="INSTALACIONES"> Instalaciones</label><br>
+                <label><input type="checkbox" name="areaApoyo" value="NOC"> NOC</label><br>
+                <label><input type="checkbox" name="areaApoyo" value="PLANTA EXTERNA"> Planta Externa</label><br>
+                <label><input type="checkbox" name="areaApoyo" value="O&M"> O&M</label><br>
+                <label><input type="checkbox" name="areaApoyo" value="MONITOREO INFRAESTRUCTURA"> Monitoreo Infraestructura</label>
+              </div>
               <div class="error-message">Seleccione al menos un área de apoyo.</div>
             </div>
 
@@ -594,7 +648,7 @@
   </div>
 
   <script>
-    // 1) Configuración: reemplace esta constante por la URL de su flujo de Power Automate (HTTP Request trigger).
+    // Reemplaza por la URL real de tu flujo HTTP en Power Automate
     const FLOW_URL = "https://TU_URL_DE_POWER_AUTOMATE_AQUI";
 
     const form = document.getElementById("jobForm");
@@ -612,7 +666,10 @@
       "detalleTrabajo",
       "nombreResponsable",
       "apellidoPaterno",
-      "apellidoMaterno"
+      "apellidoMaterno",
+      "nombreApoyo",
+      "apellidoPaternoApoyo",
+      "apellidoMaternoApoyo"
     ];
 
     uppercaseFields.forEach(id => {
@@ -629,7 +686,10 @@
     const soloTextoCampos = [
       "nombreResponsable",
       "apellidoPaterno",
-      "apellidoMaterno"
+      "apellidoMaterno",
+      "nombreApoyo",
+      "apellidoPaternoApoyo",
+      "apellidoMaternoApoyo"
     ];
 
     function mostrarErrorTexto(input) {
@@ -655,10 +715,16 @@
       });
     });
 
-    // Solo números para teléfono y 9 dígitos
+    // Solo números para teléfonos y 9 dígitos
     const telefonoResponsable = document.getElementById("telefonoResponsable");
+    const telefonoApoyo = document.getElementById("telefonoApoyo");
+
     telefonoResponsable.addEventListener("input", () => {
       telefonoResponsable.value = telefonoResponsable.value.replace(/\D/g, "").slice(0, 9);
+    });
+
+    telefonoApoyo.addEventListener("input", () => {
+      telefonoApoyo.value = telefonoApoyo.value.replace(/\D/g, "").slice(0, 9);
     });
 
     // No permitir fechas anteriores a hoy
@@ -738,16 +804,12 @@
         let msg = "";
 
         if (sameDate) {
-          // misma hora
           if (horaFin.value === horaInicio.value) {
             msg = "La hora de salida debe ser posterior a la hora de ingreso.";
-          }
-          // hora fin menor que hora inicio
-          else if (dtEnd < dtStart) {
+          } else if (dtEnd < dtStart) {
             msg = "La hora de salida pertenece al día siguiente. Cambia la fecha de salida.";
           }
         } else {
-          // fechas distintas pero hora fin no posterior
           if (dtEnd <= dtStart) {
             msg = "La hora de fin debe ser posterior a la hora de inicio.";
           }
@@ -877,10 +939,8 @@
       showFieldErrors();
 
       try {
-        // Convertir select múltiple en arreglo de strings
         const areaApoyoOptions = Array.from(document.querySelectorAll('input[name="areaApoyo"]:checked')).map(cb => cb.value);
 
-        // Convierte archivos a base64 para enviarlos dentro del JSON
         async function fileToBase64Info(fileInput) {
           const file = fileInput.files[0];
           if (!file) return null;
@@ -888,7 +948,7 @@
           const base64 = await new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => {
-              const result = reader.result.split(",")[1]; // quitar encabezado data:
+              const result = reader.result.split(",")[1];
               resolve(result);
             };
             reader.onerror = reject;
@@ -923,6 +983,11 @@
           apellidoMaterno: document.getElementById("apellidoMaterno").value.trim().toUpperCase(),
           telefonoResponsable: telefonoResponsable.value,
           correoResponsable: document.getElementById("correoResponsable").value.trim(),
+          nombreApoyo: document.getElementById("nombreApoyo").value.trim().toUpperCase(),
+          apellidoPaternoApoyo: document.getElementById("apellidoPaternoApoyo").value.trim().toUpperCase(),
+          apellidoMaternoApoyo: document.getElementById("apellidoMaternoApoyo").value.trim().toUpperCase(),
+          telefonoApoyo: telefonoApoyo.value,
+          correoApoyo: document.getElementById("correoApoyo").value.trim(),
           areaApoyo: areaApoyoOptions,
           clientesAfectados: clientesAfectadosSelect.value,
           cantidadClientesAfectados:
@@ -931,7 +996,6 @@
           archivoPlanTrabajo: archivoPlanInfo
         };
 
-        // Envío al flujo de Power Automate
         const res = await fetch(FLOW_URL, {
           method: "POST",
           headers: {
@@ -973,3 +1037,5 @@
   </script>
 </body>
 </html>
+
+
