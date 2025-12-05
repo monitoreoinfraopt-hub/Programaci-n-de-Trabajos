@@ -965,36 +965,40 @@
         const archivoPlanInfo = await fileToBase64Info(archivoPlanInput);
         const archivoAfectadosInfo = await fileToBase64Info(archivoAfectadosInput);
 
-        const payload = {
-          tituloTrabajo: document.getElementById("tituloTrabajo").value.trim().toUpperCase(),
-          nodo: document.getElementById("nodo").value,
-          tipoCambio: document.getElementById("tipoCambio").value,
-          riesgoImpacto: document.getElementById("riesgoImpacto").value,
-          fechaInicio: fechaInicio.value,
-          fechaFin: fechaFin.value,
-          horaInicio: horaInicio.value,
-          horaFin: horaFin.value,
-          corteEfectivoMinutos: document.getElementById("corteEfectivo").value,
-          ventanaTrabajoHoras: document.getElementById("ventanaHoras").value,
-          detalleTrabajo: document.getElementById("detalleTrabajo").value.trim().toUpperCase(),
-          areaResponsable: document.getElementById("areaResponsable").value,
-          nombreResponsable: document.getElementById("nombreResponsable").value.trim().toUpperCase(),
-          apellidoPaterno: document.getElementById("apellidoPaterno").value.trim().toUpperCase(),
-          apellidoMaterno: document.getElementById("apellidoMaterno").value.trim().toUpperCase(),
-          telefonoResponsable: telefonoResponsable.value,
-          correoResponsable: document.getElementById("correoResponsable").value.trim(),
-          nombreApoyo: document.getElementById("nombreApoyo").value.trim().toUpperCase(),
-          apellidoPaternoApoyo: document.getElementById("apellidoPaternoApoyo").value.trim().toUpperCase(),
-          apellidoMaternoApoyo: document.getElementById("apellidoMaternoApoyo").value.trim().toUpperCase(),
-          telefonoApoyo: telefonoApoyo.value,
-          correoApoyo: document.getElementById("correoApoyo").value.trim(),
-          areaApoyo: areaApoyoOptions,
-          clientesAfectados: clientesAfectadosSelect.value,
-          cantidadClientesAfectados:
-            clientesAfectadosSelect.value === "SI" ? (cantidadClientesInput.value || null) : null,
-          archivoAfectados: clientesAfectadosSelect.value === "SI" ? archivoAfectadosInfo : null,
-          archivoPlanTrabajo: archivoPlanInfo
-        };
+       const payload = {
+  tituloTrabajo: document.getElementById("tituloTrabajo").value.trim().toUpperCase(),
+  nodo: document.getElementById("nodo").value,
+  tipoCambio: document.getElementById("tipoCambio").value,
+  riesgoImpacto: document.getElementById("riesgoImpacto").value,
+  fechaInicio: fechaInicio.value,
+  fechaFin: fechaFin.value,
+  horaInicio: horaInicio.value,
+  horaFin: horaFin.value,
+  corteEfectivoMinutos: document.getElementById("corteEfectivo").value,
+  ventanaTrabajoHoras: document.getElementById("ventanaHoras").value,
+  detalleTrabajo: document.getElementById("detalleTrabajo").value.trim().toUpperCase(),
+  areaResponsable: document.getElementById("areaResponsable").value,
+  nombreResponsable: document.getElementById("nombreResponsable").value.trim().toUpperCase(),
+  apellidoPaterno: document.getElementById("apellidoPaterno").value.trim().toUpperCase(),
+  apellidoMaterno: document.getElementById("apellidoMaterno").value.trim().toUpperCase(),
+  telefonoResponsable: telefonoResponsable.value,
+  correoResponsable: document.getElementById("correoResponsable").value.trim(),
+  nombreApoyo: document.getElementById("nombreApoyo").value.trim().toUpperCase(),
+  apellidoPaternoApoyo: document.getElementById("apellidoPaternoApoyo").value.trim().toUpperCase(),
+  apellidoMaternoApoyo: document.getElementById("apellidoMaternoApoyo").value.trim().toUpperCase(),
+  telefonoApoyo: telefonoApoyo.value,
+  correoApoyo: document.getElementById("correoApoyo").value.trim(),
+  areaApoyo: areaApoyoOptions,
+  clientesAfectados: clientesAfectadosSelect.value,
+  // OJO: por defecto NO ponemos cantidadClientesAfectados ni archivoAfectados
+  archivoPlanTrabajo: archivoPlanInfo
+};
+
+// Solo si hay afectados, añadimos los campos extra
+if (clientesAfectadosSelect.value === "SI") {
+  payload.cantidadClientesAfectados = parseInt(cantidadClientesInput.value, 10);
+  payload.archivoAfectados = archivoAfectadosInfo;
+}
 
         const res = await fetch(FLOW_URL, {
           method: "POST",
@@ -1037,6 +1041,7 @@
   </script>
 </body>
 </html>
+
 
 
 
