@@ -292,6 +292,22 @@
               <div class="error-message">Ingrese el título del trabajo.</div>
             </div>
 
+            <!-- NUEVO CAMPO: CÓDIGO (SOLO NÚMEROS) -->
+            <div class="form-group">
+              <label for="codigoTrabajo">N° Ticket</label>
+              <input
+                type="text"
+                id="codigoTrabajo"
+                name="codigoTrabajo"
+                inputmode="numeric"
+                pattern="\d*"
+                maxlength="30"
+                autocomplete="off"
+              />
+              <!-- <div class="help">Solo números.</div>-->
+              <div class="error-message">El código solo permite números.</div>
+            </div>
+
             <div class="form-group">
               <label for="nodo" class="required">Nodo</label>
               <select id="nodo" name="nodo" required>
@@ -660,6 +676,18 @@
     const archivoAfectadosInput = document.getElementById("archivoAfectados");
     const archivoPlanInput = document.getElementById("archivoPlan");
 
+    // NUEVO: Código (solo números)
+    const codigoTrabajoInput = document.getElementById("codigoTrabajo");
+    if (codigoTrabajoInput) {
+      codigoTrabajoInput.addEventListener("input", () => {
+        const original = codigoTrabajoInput.value;
+        const limpio = original.replace(/\D/g, "");
+        if (original !== limpio) {
+          codigoTrabajoInput.value = limpio;
+        }
+      });
+    }
+
     // Campos con mayúsculas forzadas mientras se escribe
     const uppercaseFields = [
       "tituloTrabajo",
@@ -965,40 +993,40 @@
         const archivoPlanInfo = await fileToBase64Info(archivoPlanInput);
         const archivoAfectadosInfo = await fileToBase64Info(archivoAfectadosInput);
 
-       const payload = {
-  tituloTrabajo: document.getElementById("tituloTrabajo").value.trim().toUpperCase(),
-  nodo: document.getElementById("nodo").value,
-  tipoCambio: document.getElementById("tipoCambio").value,
-  riesgoImpacto: document.getElementById("riesgoImpacto").value,
-  fechaInicio: fechaInicio.value,
-  fechaFin: fechaFin.value,
-  horaInicio: horaInicio.value,
-  horaFin: horaFin.value,
-  corteEfectivoMinutos: document.getElementById("corteEfectivo").value,
-  ventanaTrabajoHoras: document.getElementById("ventanaHoras").value,
-  detalleTrabajo: document.getElementById("detalleTrabajo").value.trim().toUpperCase(),
-  areaResponsable: document.getElementById("areaResponsable").value,
-  nombreResponsable: document.getElementById("nombreResponsable").value.trim().toUpperCase(),
-  apellidoPaterno: document.getElementById("apellidoPaterno").value.trim().toUpperCase(),
-  apellidoMaterno: document.getElementById("apellidoMaterno").value.trim().toUpperCase(),
-  telefonoResponsable: telefonoResponsable.value,
-  correoResponsable: document.getElementById("correoResponsable").value.trim(),
-  nombreApoyo: document.getElementById("nombreApoyo").value.trim().toUpperCase(),
-  apellidoPaternoApoyo: document.getElementById("apellidoPaternoApoyo").value.trim().toUpperCase(),
-  apellidoMaternoApoyo: document.getElementById("apellidoMaternoApoyo").value.trim().toUpperCase(),
-  telefonoApoyo: telefonoApoyo.value,
-  correoApoyo: document.getElementById("correoApoyo").value.trim(),
-  areaApoyo: areaApoyoOptions,
-  clientesAfectados: clientesAfectadosSelect.value,
-  // OJO: por defecto NO ponemos cantidadClientesAfectados ni archivoAfectados
-  archivoPlanTrabajo: archivoPlanInfo
-};
+        const payload = {
+          tituloTrabajo: document.getElementById("tituloTrabajo").value.trim().toUpperCase(),
+          codigo: document.getElementById("codigoTrabajo").value.trim(),   // <-- NUEVO
+          nodo: document.getElementById("nodo").value,
+          tipoCambio: document.getElementById("tipoCambio").value,
+          riesgoImpacto: document.getElementById("riesgoImpacto").value,
+          fechaInicio: fechaInicio.value,
+          fechaFin: fechaFin.value,
+          horaInicio: horaInicio.value,
+          horaFin: horaFin.value,
+          corteEfectivoMinutos: document.getElementById("corteEfectivo").value,
+          ventanaTrabajoHoras: document.getElementById("ventanaHoras").value,
+          detalleTrabajo: document.getElementById("detalleTrabajo").value.trim().toUpperCase(),
+          areaResponsable: document.getElementById("areaResponsable").value,
+          nombreResponsable: document.getElementById("nombreResponsable").value.trim().toUpperCase(),
+          apellidoPaterno: document.getElementById("apellidoPaterno").value.trim().toUpperCase(),
+          apellidoMaterno: document.getElementById("apellidoMaterno").value.trim().toUpperCase(),
+          telefonoResponsable: telefonoResponsable.value,
+          correoResponsable: document.getElementById("correoResponsable").value.trim(),
+          nombreApoyo: document.getElementById("nombreApoyo").value.trim().toUpperCase(),
+          apellidoPaternoApoyo: document.getElementById("apellidoPaternoApoyo").value.trim().toUpperCase(),
+          apellidoMaternoApoyo: document.getElementById("apellidoMaternoApoyo").value.trim().toUpperCase(),
+          telefonoApoyo: telefonoApoyo.value,
+          correoApoyo: document.getElementById("correoApoyo").value.trim(),
+          areaApoyo: areaApoyoOptions,
+          clientesAfectados: clientesAfectadosSelect.value,
+          archivoPlanTrabajo: archivoPlanInfo
+        };
 
-// Solo si hay afectados, añadimos los campos extra
-if (clientesAfectadosSelect.value === "SI") {
-  payload.cantidadClientesAfectados = parseInt(cantidadClientesInput.value, 10);
-  payload.archivoAfectados = archivoAfectadosInfo;
-}
+        // Solo si hay afectados, añadimos los campos extra
+        if (clientesAfectadosSelect.value === "SI") {
+          payload.cantidadClientesAfectados = parseInt(cantidadClientesInput.value, 10);
+          payload.archivoAfectados = archivoAfectadosInfo;
+        }
 
         const res = await fetch(FLOW_URL, {
           method: "POST",
@@ -1041,6 +1069,7 @@ if (clientesAfectadosSelect.value === "SI") {
   </script>
 </body>
 </html>
+
 
 
 
