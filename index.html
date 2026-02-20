@@ -262,6 +262,10 @@
       font-weight: 500;
     }
   </style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 </head>
 <body>
   <div class="page">
@@ -294,16 +298,16 @@
 
             <!-- NUEVO CAMPO: CÓDIGO (SOLO NÚMEROS) -->
             <div class="form-group">
-              <label for="codigoTrabajo">N° Ticket</label>
+              <label for="codigoTrabajo" class="required">N° Ticket</label>
               <input
                 type="text"
-                id="codigoTrabajo"
+                id="codigoTrabajo" required
                 name="codigoTrabajo"
                 inputmode="numeric"
                 pattern="\d*"
                 maxlength="30"
                 autocomplete="off"
-              />
+              >
               <!-- <div class="help">Solo números.</div>-->
               <div class="error-message">El código solo permite números.</div>
             </div>
@@ -364,13 +368,13 @@
 
             <div class="form-group">
               <label for="horaInicio" class="required">Hora de inicio</label>
-              <input type="time" id="horaInicio" name="horaInicio" required />
+              <input type="text" id="horaInicio" name="horaInicio" required />
               <div class="error-message">Seleccione la hora de inicio.</div>
             </div>
 
             <div class="form-group">
               <label for="horaFin" class="required">Hora de fin</label>
-              <input type="time" id="horaFin" name="horaFin" required />
+              <input type="text" id="horaFin" name="horaFin" required />
               <div class="error-message">
                 Revise la hora de fin. Para la misma fecha debe ser posterior a la hora de inicio.
               </div>
@@ -448,7 +452,7 @@
             </div>
 
             <div class="form-group">
-              <label for="apellidoPaterno" class="required">Apellido paterno del responsable</label>
+              <label for="apellidoPaterno" class="required">Apellidos del responsable</label>
               <input
                 type="text"
                 id="apellidoPaterno"
@@ -459,17 +463,7 @@
               <div class="error-message">Este campo solo permite texto (sin números ni signos).</div>
             </div>
 
-            <div class="form-group">
-              <label for="apellidoMaterno" class="required">Apellido materno del responsable</label>
-              <input
-                type="text"
-                id="apellidoMaterno"
-                name="apellidoMaterno"
-                required
-                pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+"
-              />
-              <div class="error-message">Este campo solo permite texto (sin números ni signos).</div>
-            </div>
+            
 
             <div class="form-group">
               <label for="telefonoResponsable" class="required">Telf. responsable</label>
@@ -513,7 +507,7 @@
             </div>
 
             <div class="form-group">
-              <label for="apellidoPaternoApoyo" class="required">Ap. Paterno apoyo</label>
+              <label for="apellidoPaternoApoyo" class="required">Apellidos apoyo</label>
               <input
                 type="text"
                 id="apellidoPaternoApoyo"
@@ -524,17 +518,7 @@
               <div class="error-message">Este campo solo permite texto (sin números ni signos).</div>
             </div>
 
-            <div class="form-group">
-              <label for="apellidoMaternoApoyo" class="required">Ap. Materno apoyo</label>
-              <input
-                type="text"
-                id="apellidoMaternoApoyo"
-                name="apellidoMaternoApoyo"
-                required
-                pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+"
-              />
-              <div class="error-message">Este campo solo permite texto (sin números ni signos).</div>
-            </div>
+            
 
             <div class="form-group">
               <label for="telefonoApoyo" class="required">Telf. apoyo</label>
@@ -589,7 +573,7 @@
             </div>
 
             <div class="form-group">
-              <label for="clientesAfectados" class="required">Clientes y/o enlaces afectados</label>
+              <label for="clientesAfectados" class="required">Clientes afectados </label>
               <select id="clientesAfectados" name="clientesAfectados" required>
                 <option value="">— Seleccionar —</option>
                 <option value="SI">SI</option>
@@ -694,10 +678,10 @@
       "detalleTrabajo",
       "nombreResponsable",
       "apellidoPaterno",
-      "apellidoMaterno",
+      
       "nombreApoyo",
       "apellidoPaternoApoyo",
-      "apellidoMaternoApoyo"
+      
     ];
 
     uppercaseFields.forEach(id => {
@@ -714,10 +698,10 @@
     const soloTextoCampos = [
       "nombreResponsable",
       "apellidoPaterno",
-      "apellidoMaterno",
+      
       "nombreApoyo",
       "apellidoPaternoApoyo",
-      "apellidoMaternoApoyo"
+      
     ];
 
     function mostrarErrorTexto(input) {
@@ -1009,12 +993,10 @@
           areaResponsable: document.getElementById("areaResponsable").value,
           nombreResponsable: document.getElementById("nombreResponsable").value.trim().toUpperCase(),
           apellidoPaterno: document.getElementById("apellidoPaterno").value.trim().toUpperCase(),
-          apellidoMaterno: document.getElementById("apellidoMaterno").value.trim().toUpperCase(),
           telefonoResponsable: telefonoResponsable.value,
           correoResponsable: document.getElementById("correoResponsable").value.trim(),
           nombreApoyo: document.getElementById("nombreApoyo").value.trim().toUpperCase(),
           apellidoPaternoApoyo: document.getElementById("apellidoPaternoApoyo").value.trim().toUpperCase(),
-          apellidoMaternoApoyo: document.getElementById("apellidoMaternoApoyo").value.trim().toUpperCase(),
           telefonoApoyo: telefonoApoyo.value,
           correoApoyo: document.getElementById("correoApoyo").value.trim(),
           areaApoyo: areaApoyoOptions,
@@ -1054,7 +1036,23 @@
       }
     });
 
-    // Quitar estado de error al modificar un campo
+    
+// Inicializar selector moderno de hora
+flatpickr("#horaInicio", {
+  enableTime: true,
+  noCalendar: true,
+  dateFormat: "H:i",
+  time_24hr: true
+});
+
+flatpickr("#horaFin", {
+  enableTime: true,
+  noCalendar: true,
+  dateFormat: "H:i",
+  time_24hr: true
+});
+
+// Quitar estado de error al modificar un campo
     form.addEventListener("input", (e) => {
       const field = e.target;
       const container = field.closest(".form-group");
@@ -1069,6 +1067,7 @@
   </script>
 </body>
 </html>
+
 
 
 
