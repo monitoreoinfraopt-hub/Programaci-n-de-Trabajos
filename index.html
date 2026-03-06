@@ -316,9 +316,6 @@
               <label for="nodo" class="required">Nodo</label>
               <select id="nodo" name="nodo" required>
                 <option value="">— Seleccionar —</option>
-                <option value="LA MOLINA">LA MOLINA</option>
-                <option value="VITARTE">VITARTE</option>
-                <option value="ZARATE">ZÁRATE</option>
                 <!-- Agrega aquí los demás nodos -->
               </select>
               <div class="error-message">Seleccione un nodo.</div>
@@ -391,15 +388,8 @@
               <div class="error-message">Seleccione el corte efectivo en minutos.</div>
             </div>
 
-            <div class="form-group">
-              <label for="ventanaHoras" class="required">Ventana de trabajo (horas)</label>
-              <select id="ventanaHoras" name="ventanaHoras" required>
-                <option value="">— Seleccionar —</option>
-                <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
-                <option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option>
-              </select>
-              <div class="error-message">Seleccione la ventana de trabajo en horas.</div>
-            </div>
+            <input type="hidden" id="ventanaHoras" name="ventanaHoras">
+                
           </div>
         </fieldset>
 
@@ -434,7 +424,7 @@
                 <option>INFRAESTRUCTURA</option>
                 <option>PLANTA EXTERNA</option>
                 <option>CIBERSEGURIDAD</option>
-                <option>SVA</option>
+                <option>PROYECTOS ESPECIALES</option>
               </select>
               <div class="error-message">Seleccione el área responsable.</div>
             </div>
@@ -772,9 +762,14 @@
 
     const horaInicio = document.getElementById("horaInicio");
     const horaFin = document.getElementById("horaFin");
+    const ventanaHoras = document.getElementById("ventanaHoras");
 
     horaInicio.addEventListener("change", validateDatesAndTimes);
     horaFin.addEventListener("change", validateDatesAndTimes);
+
+    horaInicio.addEventListener("change", calcularVentanaTrabajo);
+    horaFin.addEventListener("change", calcularVentanaTrabajo);
+
 
     function getDateTime(dateInput, timeInput) {
       if (!dateInput.value || !timeInput.value) return null;
@@ -846,6 +841,28 @@
 
       return isValid;
     }
+
+function calcularVentanaTrabajo() {
+
+  if (!horaInicio.value || !horaFin.value) return;
+
+  const inicio = horaInicio.value.split(":");
+  const fin = horaFin.value.split(":");
+
+  const horaInicioMin = parseInt(inicio[0]) * 60 + parseInt(inicio[1]);
+  const horaFinMin = parseInt(fin[0]) * 60 + parseInt(fin[1]);
+
+  let diferencia = horaFinMin - horaInicioMin;
+
+  if (diferencia < 0) {
+    diferencia = diferencia + (24 * 60);
+  }
+
+  const horas = Math.ceil(diferencia / 60);
+
+  ventanaHoras.value = horas;
+}
+
 
     // Mostrar/ocultar campos extra cuando hay clientes afectados
     clientesAfectadosSelect.addEventListener("change", () => {
@@ -931,6 +948,7 @@
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      calcularVentanaTrabajo();
       alertSuccess.style.display = "none";
       alertError.style.display = "none";
 
@@ -1064,12 +1082,102 @@ flatpickr("#horaFin", {
         errorEl.style.display = "none";
       }
     });
+
+    const listaNodos = [
+"GERARDO_UNGER",
+"TRES_DE_MAYO",
+"JUAN_PABLO",
+"SANTOS_CHOCANO",
+"JARDINES",
+"TUNGASUCA",
+"VELARDE",
+"CALLAO",
+"HIPOLITO_UNANUE",
+"HUANDOY",
+"VARELA",
+"ENSENADA",
+"SAN_REMO",
+"GALVEZ_II",
+"FRANCISCO_MOREYRA",
+"ANGAMOS",
+"REP_DE_PANAMA",
+"ESPERANZA",
+"BENVENUTTO",
+"CHORRILLOS",
+"PACHACAMAC",
+"ALAMOS",
+"CIPRESES",
+"GUARDIA_PERUANA",
+"BUCKINGHAM",
+"EL_SAUCE",
+"TRIGAL",
+"PISTA_NUEVA",
+"VILLA_EL_SALVADOR",
+"200_MILLAS",
+"NINO_JESUS",
+"PELITRES",
+"VITARTE",
+"BAYOVAR",
+"MIRABLES",
+"ZARATE",
+"SALAMANCA",
+"FLAMENGOS",
+"SAN_PEDRO",
+"SAN_LUIS",
+"PERSHING",
+"CAQUETA",
+"SANTA_ROSA",
+"SANTA_FE",
+"SUCRE",
+"LINCE",
+"NATALIO_SANCHEZ",
+"HUACHO",
+"BARRANCA",
+"HUARAL",
+"CHANCAY",
+"MARIATEGUI",
+"LA_MOLINA",
+"TRUJILLO_LA_MERCED",
+"TRUJILLO_SANTA_ROSA",
+"CHIMBOTE_MANCO_CAPAC",
+"CHIMBOTE_PALMERAS",
+"PIURA_GARDENIAS",
+"PIURA_CATACAOS",
+"LAMBAYEQUE_PEDRO_RUIZ",
+"CHICLAYO_MAGNOLIAS",
+"LEONCIO_PRADO",
+"PUNTA_HERMOSA",
+"ARRIOLA",
+"AURELIO_SOUZA",
+"HUANCAYO_EL_TAMBO",
+"AREQUIPA_MIRAFLORES",
+"AREQUIPA_SOCABAYA",
+"HUANCAYO_CENTRO",
+"CUZCO_CALCA",
+"CUZCO_TUPAC",
+"AREQUIPA_CERRO_COLORADO",
+"SANTA_CATALINA",
+"EQUINIX",
+"CLOUD",
+"CUZCO_TUPAC_AMARU",
+"CONQUISTADORES",
+"BEGONIAS",
+"TELXIUS",
+"CIRION"
+];
+
+const nodoSelect = document.getElementById("nodo");
+
+listaNodos.sort().forEach(nodo => {
+  const option = document.createElement("option");
+  option.value = nodo;
+  option.textContent = nodo.replaceAll("_"," ");
+  nodoSelect.appendChild(option);
+});
+
   </script>
 </body>
 </html>
-
-
-
 
 
 
