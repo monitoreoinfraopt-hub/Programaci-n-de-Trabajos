@@ -296,7 +296,7 @@
               <div class="error-message">Ingrese el título del trabajo.</div>
             </div>
 
-            <!-- NUEVO CAMPO: CÓDIGO (SOLO NÚMEROS) -->
+            <!-- NUEVO CAMPO: CÓDIGO (SOLO NÚMEROS) 
             <div class="form-group">
               <label for="codigoTrabajo" class="required">N° Ticket</label>
               <input
@@ -308,9 +308,9 @@
                 maxlength="30"
                 autocomplete="off"
               >
-              <!-- <div class="help">Solo números.</div>-->
+              <div class="help">Solo números.</div>
               <div class="error-message">El código solo permite números.</div>
-            </div>
+            </div>-->
 
             <div class="form-group">
               <label for="nodo" class="required">Nodo</label>
@@ -381,7 +381,7 @@
               <label for="corteEfectivo" class="required">Corte efectivo (minutos)</label>
               <select id="corteEfectivo" name="corteEfectivo" required>
                 <option value="">— Seleccionar —</option>
-                <option>5</option><option>10</option><option>15</option><option>20</option><option>30</option>
+                <option>0</option><option>5</option><option>10</option><option>15</option><option>20</option><option>30</option>
                 <option>60</option><option>90</option><option>120</option><option>180</option><option>240</option>
                 <option>300</option><option>360</option><option>420</option><option>480</option>
               </select>
@@ -651,16 +651,16 @@
     const archivoPlanInput = document.getElementById("archivoPlan");
 
     // NUEVO: Código (solo números)
-    const codigoTrabajoInput = document.getElementById("codigoTrabajo");
-    if (codigoTrabajoInput) {
-      codigoTrabajoInput.addEventListener("input", () => {
-        const original = codigoTrabajoInput.value;
-        const limpio = original.replace(/\D/g, "");
-        if (original !== limpio) {
-          codigoTrabajoInput.value = limpio;
-        }
-      });
-    }
+   //const codigoTrabajoInput = document.getElementById("codigoTrabajo");
+    //if (codigoTrabajoInput) {
+      //codigoTrabajoInput.addEventListener("input", () => {
+        //const original = codigoTrabajoInput.value;
+        //const limpio = original.replace(/\D/g, "");
+        //if (original !== limpio) {
+         // codigoTrabajoInput.value = limpio;
+        //}
+      //});
+    //}
 
     // Campos con mayúsculas forzadas mientras se escribe
     const uppercaseFields = [
@@ -997,7 +997,7 @@ function calcularVentanaTrabajo() {
 
         const payload = {
           tituloTrabajo: document.getElementById("tituloTrabajo").value.trim().toUpperCase(),
-          codigo: document.getElementById("codigoTrabajo").value.trim(),   // <-- NUEVO
+          //codigo: document.getElementById("codigoTrabajo").value.trim(),   // <-- NUEVO
           nodo: document.getElementById("nodo").value,
           tipoCambio: document.getElementById("tipoCambio").value,
           riesgoImpacto: document.getElementById("riesgoImpacto").value,
@@ -1177,6 +1177,8 @@ listaNodos.sort().forEach(nodo => {
   </script>
 </body>
 </html>
+
+
 
 
 
