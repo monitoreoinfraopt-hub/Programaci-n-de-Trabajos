@@ -563,7 +563,7 @@
               <div class="error-message">Seleccione al menos un área de apoyo.</div>
             </div>
 
-            <div class="form-group">
+          <div class="form-group" id="clientesAfectadosGroup">
               <label for="clientesAfectados" class="required">Clientes afectados </label>
               <select id="clientesAfectados" name="clientesAfectados" required>
                 <option value="">— Seleccionar —</option>
@@ -605,7 +605,7 @@
           </div>
 
           <!-- Archivo plan trabajo (siempre visible) -->
-          <div style="margin-top: 1rem;">
+          <div id="archivoPlanGroup" style="margin-top: 1rem;">
             <div class="form-group">
               <label for="archivoPlan" class="required">Subir archivo Excel del plan de trabajo</label>
               <input
@@ -650,6 +650,56 @@
     const cantidadClientesInput = document.getElementById("cantidadClientes");
     const archivoAfectadosInput = document.getElementById("archivoAfectados");
     const archivoPlanInput = document.getElementById("archivoPlan");
+    const tipoCambioSelect = document.getElementById("tipoCambio");
+    const clientesAfectadosGroup = document.getElementById("clientesAfectadosGroup");
+    const archivoPlanGroup = document.getElementById("archivoPlanGroup");
+
+    function actualizarCamposPorTipoTrabajo() {
+
+  const esRequerimiento = tipoCambioSelect.value === "REQUERIMIENTO";
+
+  if (esRequerimiento) {
+
+    // Ocultar Clientes afectados
+    clientesAfectadosGroup.style.display = "none";
+
+    // Ocultar campos extras de afectados
+    afectadosExtra.style.display = "none";
+
+    // Ocultar Excel del plan de trabajo
+    archivoPlanGroup.style.display = "none";
+
+    // Ya no son obligatorios
+    clientesAfectadosSelect.removeAttribute("required");
+    cantidadClientesInput.removeAttribute("required");
+    archivoAfectadosInput.removeAttribute("required");
+    archivoPlanInput.removeAttribute("required");
+
+    // Limpiar cualquier valor que haya seleccionado antes
+    clientesAfectadosSelect.value = "";
+    cantidadClientesInput.value = "";
+    archivoAfectadosInput.value = "";
+    archivoPlanInput.value = "";
+
+    // Limpiar validaciones
+    clientesAfectadosSelect.setCustomValidity("");
+    cantidadClientesInput.setCustomValidity("");
+    archivoAfectadosInput.setCustomValidity("");
+    archivoPlanInput.setCustomValidity("");
+
+  } else {
+
+    // Mostrar nuevamente
+    clientesAfectadosGroup.style.display = "";
+    archivoPlanGroup.style.display = "";
+
+    // Obligatorios nuevamente
+    clientesAfectadosSelect.setAttribute("required", "required");
+    archivoPlanInput.setAttribute("required", "required");
+  }
+}
+
+tipoCambioSelect.addEventListener("change", actualizarCamposPorTipoTrabajo);
 
     // NUEVO: Código (solo números)
    //const codigoTrabajoInput = document.getElementById("codigoTrabajo");
@@ -920,9 +970,16 @@ function calcularVentanaTrabajo() {
       return true;
     }
 
-    archivoPlanInput.addEventListener("change", () => {
-      validateFileInput(archivoPlanInput, true);
-    });
+   archivoPlanInput.addEventListener("change", () => {
+
+  const required = tipoCambioSelect.value !== "REQUERIMIENTO";
+
+  validateFileInput(
+    archivoPlanInput,
+    required
+  );
+
+});
     archivoAfectadosInput.addEventListener("change", () => {
       const required = clientesAfectadosSelect.value === "SI";
       validateFileInput(archivoAfectadosInput, required);
@@ -953,12 +1010,21 @@ function calcularVentanaTrabajo() {
       alertSuccess.style.display = "none";
       alertError.style.display = "none";
 
-      const datesValid = validateDatesAndTimes();
-      const planValid = validateFileInput(archivoPlanInput, true);
-      const afectadosValid = validateFileInput(
-        archivoAfectadosInput,
-        clientesAfectadosSelect.value === "SI"
-      );
+     const datesValid = validateDatesAndTimes();
+
+const esRequerimiento =
+  tipoCambioSelect.value === "REQUERIMIENTO";
+
+const planValid = esRequerimiento
+  ? true
+  : validateFileInput(archivoPlanInput, true);
+
+const afectadosValid = esRequerimiento
+  ? true
+  : validateFileInput(
+      archivoAfectadosInput,
+      clientesAfectadosSelect.value === "SI"
+    );
 
       if (!form.checkValidity() || !datesValid || !planValid || !afectadosValid) {
         showFieldErrors();
@@ -992,9 +1058,17 @@ function calcularVentanaTrabajo() {
             contentBase64: base64
           };
         }
+const esRequerimiento =
+  tipoCambioSelect.value === "REQUERIMIENTO";
 
-        const archivoPlanInfo = await fileToBase64Info(archivoPlanInput);
-        const archivoAfectadosInfo = await fileToBase64Info(archivoAfectadosInput);
+const archivoPlanInfo = esRequerimiento
+  ? null
+  : await fileToBase64Info(archivoPlanInput);
+
+const archivoAfectadosInfo =
+  !esRequerimiento && clientesAfectadosSelect.value === "SI"
+    ? await fileToBase64Info(archivoAfectadosInput)
+    : null;
 
         const payload = {
           tituloTrabajo: document.getElementById("tituloTrabajo").value.trim().toUpperCase(),
@@ -1019,9 +1093,28 @@ function calcularVentanaTrabajo() {
           telefonoApoyo: telefonoApoyo.value,
           correoApoyo: document.getElementById("correoApoyo").value.trim(),
           areaApoyo: areaApoyoOptions,
-          clientesAfectados: clientesAfectadosSelect.value,
-          archivoPlanTrabajo: archivoPlanInfo
+          
         };
+
+         // Datos que solamente corresponden a cambios,
+// NO a REQUERIMIENTOS
+if (!esRequerimiento) {
+
+  payload.clientesAfectados =
+    clientesAfectadosSelect.value;
+
+  payload.archivoPlanTrabajo =
+    archivoPlanInfo;
+
+  if (clientesAfectadosSelect.value === "SI") {
+
+    payload.cantidadClientesAfectados =
+      parseInt(cantidadClientesInput.value, 10);
+
+    payload.archivoAfectados =
+      archivoAfectadosInfo;
+  }
+} 
 
         // Solo si hay afectados, añadimos los campos extra
         if (clientesAfectadosSelect.value === "SI") {
@@ -1180,14 +1273,4 @@ listaNodos.sort().forEach(nodo => {
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
 
